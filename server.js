@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-// Update the CORS configuration to allow requests only from specific domains
+// إعدادات CORS للسماح بالطلبات فقط من نطاقات محددة
 const corsOptions = {
   origin: ["https://pan-client-ten.vercel.app", "http://localhost:3000"], // السماح فقط لهذه النطاقات
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -27,8 +27,11 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
+// زيادة الحد الأقصى لحجم البيانات المسموح بها
+app.use(bodyParser.json({ limit: '50mb' })); // زيادة الحد الأقصى لحجم البيانات
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 
@@ -74,4 +77,4 @@ app.listen(PORT, async () => {
     console.log("error connecting to database: ", error);
     process.exit(1);
   }
-}); 
+});
